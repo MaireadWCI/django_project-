@@ -208,3 +208,58 @@ Testing our app
 
 Save all files
 26. Open a browser window by returning to the terminal tab and running the Django server with the same command as you did previously, and now you can see the text Hello, world! In the browser.
+
+
+
+Deploying to Heroku
+In these text-based steps, we will:
+
+Deploy our simple Hello, World Django project to Heroku.
+Note: These text steps assume you have a verified Heroku account and an eco dynos plan subscription through your Student Developer Pack.
+
+Create the Heroku app
+1. Navigate to your Heroku dashboard and create a new app with a unique name.
+
+Heroku app creation
+2. Click on the Settings tab and reveal the config vars. Add a key of DISABLE_COLLECTSTATIC and a value of 1 and click Add.
+
+This step prevents Heroku from uploading static files, such as CSS and JS, during the build. We will explain this in more detail later when we have written some HTML for the project.
+
+Heroku config var to disable collectstatic
+Update your code for deployment
+3. Install a production-ready webserver for Heroku.
+
+pip3 install gunicorn~=20.1 
+Add gunicorn==20.1.0 to the requirements.txt file with:
+
+pip3 freeze --local > requirements.txt
+Note: gunicorn is a production equivalent of the manage.py runserver used in development but with speed and security optimisation.
+
+pip3 install of gunicorn web server
+4. Create a file named Procfile at the root directory of the project (same directory as requirements.txt).
+
+Note: The Procfile has no file extension.
+
+Create Procfile at root level directory
+5. In the Procfile, declare this is a web process followed by the command to execute your Django project.
+
+web: gunicorn my_project.wsgi
+This assumes your project is named my_project.
+
+Note the space after the colon.
+
+Note: gunicorn my_project.wsgi is the command heroku will use to start the server. It works similarly to python3 manage.py runserver.
+
+Declare web app with gunicorn server
+6. Open the my_project/settings.py file and replace DEBUG=True with DEBUG=False.
+
+Note the comment regarding security in production.
+
+DEBUG=False
+7. Also, in settings.py we need to append the Heroku hostname to the ALLOWED_HOSTS list, in addition to the local host we added in the last lesson.
+
+,'.herokuapp.com'
+Note: Remember the comma and the dot before herokuapp.
+
+Add herokuapp to allowed hosts
+8. You can now git add the files you have modified, git commit them and push them to GitHub.
